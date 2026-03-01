@@ -1,61 +1,94 @@
+-- HBnB Database Schema
+-- Compatible with MySQL and SQLite
+
 -- Create database
 CREATE DATABASE IF NOT EXISTS hbnb_db;
 USE hbnb_db;
 
--- Users table
-CREATE TABLE users (
-    id VARCHAR(36) PRIMARY KEY,
-    first_name VARCHAR(50) NOT NULL,
-    last_name VARCHAR(50) NOT NULL,
-    email VARCHAR(120) UNIQUE NOT NULL,
+-- =====================================================
+-- Table: accounts (users)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS accounts (
+    user_id VARCHAR(36) PRIMARY KEY,
+    given_name VARCHAR(50) NOT NULL,
+    family_name VARCHAR(50) NOT NULL,
+    email_address VARCHAR(120) NOT NULL UNIQUE,
     password VARCHAR(128) NOT NULL,
-    is_admin BOOLEAN DEFAULT FALSE,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
+    is_administrator BOOLEAN DEFAULT FALSE,
+    registered_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_accounts_email (email_address),
+    INDEX idx_accounts_name (given_name, family_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Places table
-CREATE TABLE places (
-    id VARCHAR(36) PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    description TEXT,
-    price FLOAT NOT NULL,
-    latitude FLOAT NOT NULL,
-    longitude FLOAT NOT NULL,
+-- =====================================================
+-- Table: facilities (amenities)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS facilities (
+    facility_id VARCHAR(36) PRIMARY KEY,
+    facility_name VARCHAR(50) NOT NULL UNIQUE,
+    facility_description VARCHAR(250),
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    INDEX idx_facilities_name (facility_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- =====================================================
+-- Table: properties (places)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS properties (
+    property_id VARCHAR(36) PRIMARY KEY,
+    property_title VARCHAR(100) NOT NULL,
+    property_description TEXT,
+    nightly_rate DECIMAL(10, 2) NOT NULL,
+    location_latitude DECIMAL(10, 8) NOT NULL,
+    location_longitude DECIMAL(11, 8) NOT NULL,
     owner_id VARCHAR(36) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (owner_id) REFERENCES users(id) ON DELETE CASCADE
-);
+    created_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (owner_id) REFERENCES accounts(user_id) ON DELETE CASCADE,
+    
+    INDEX idx_properties_owner (owner_id),
+    INDEX idx_properties_location (location_latitude, location_longitude),
+    INDEX idx_properties_price (nightly_rate)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Reviews table
-CREATE TABLE reviews (
-    id VARCHAR(36) PRIMARY KEY,
-    text TEXT NOT NULL,
-    rating INT NOT NULL CHECK (rating BETWEEN 1 AND 5),
-    user_id VARCHAR(36) NOT NULL,
-    place_id VARCHAR(36) NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (place_id) REFERENCES places(id) ON DELETE CASCADE,
-    UNIQUE KEY unique_review (user_id, place_id)
-);
+-- =====================================================
+-- Table: feedbacks (reviews)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS feedbacks (
+    feedback_id VARCHAR(36) PRIMARY KEY,
+    comment TEXT NOT NULL,
+    score INT NOT NULL CHECK (score BETWEEN 1 AND 5),
+    author_id VARCHAR(36) NOT NULL,
+    property_id VARCHAR(36) NOT NULL,
+    posted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    edited_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (author_id) REFERENCES accounts(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (property_id) REFERENCES properties(property_id) ON DELETE CASCADE,
+    
+    UNIQUE KEY unique_user_property_review (author_id, property_id),
+    
+    INDEX idx_feedbacks_author (author_id),
+    INDEX idx_feedbacks_property (property_id),
+    INDEX idx_feedbacks_rating (score)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Amenities table
-CREATE TABLE amenities (
-    id VARCHAR(36) PRIMARY KEY,
-    name VARCHAR(50) NOT NULL,
-    description VARCHAR(200),
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
--- Place_Amenity junction table
-CREATE TABLE place_amenity (
-    place_id VARCHAR(36) NOT NULL,
-    amenity_id VARCHAR(36) NOT NULL,
-    PRIMARY KEY (place_id, amenity_id),
-    FOREIGN KEY (place_id) REFERENCES places(id) ON DELETE CASCADE,
-    FOREIGN KEY (amenity_id) REFERENCES amenities(id) ON DELETE CASCADE
-);
+-- =====================================================
+-- Table: property_facility (many-to-many relationship)
+-- =====================================================
+CREATE TABLE IF NOT EXISTS property_facility (
+    property_id VARCHAR(36) NOT NULL,
+    facility_id VARCHAR(36) NOT NULL,
+    added_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (property_id, facility_id),
+    FOREIGN KEY (property_id) REFERENCES properties(property_id) ON DELETE CASCADE,
+    FOREIGN KEY (facility_id) REFERENCES facilities(facility_id) ON DELETE CASCADE,
+    
+    INDEX idx_property_facility_facility (facility_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
