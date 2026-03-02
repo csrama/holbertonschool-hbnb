@@ -20,7 +20,7 @@ class Place(BaseModel):
     - reviews: list of Review
     - amenities: list of Amenity (many-to-many)
     """
-    
+
     __tablename__ = 'places'
 
     # SQLAlchemy columns
@@ -34,8 +34,12 @@ class Place(BaseModel):
     # Relationships
     owner = db.relationship('User', backref='places', lazy=True)
     reviews = db.relationship('Review', backref='place', lazy=True, cascade='all, delete-orphan')
-    amenities = db.relationship('Amenity', secondary='place_amenity', 
-                               lazy='subquery', backref=db.backref('places', lazy=True))
+    amenities = db.relationship(
+        'Amenity',
+        secondary='place_amenity',
+        lazy='subquery',
+        backref=db.backref('places', lazy=True)
+    )
 
     def __init__(
         self,
@@ -120,10 +124,3 @@ class Place(BaseModel):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
-         reviews = db.relationship("Review", backref="place", cascade="all, delete")
-
-      amenities = db.relationship(
-      "Amenity",
-      secondary="place_amenity",
-      backref="places"
-)
