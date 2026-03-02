@@ -120,10 +120,10 @@ class Place(BaseModel):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None
         }
-   reviews = db.relationship("Review", backref="place", cascade="all, delete")
+         reviews = db.relationship("Review", backref="place", cascade="all, delete")
 
-amenities = db.relationship(
-    "Amenity",
-    secondary="place_amenity",
-    backref="places"
+      amenities = db.relationship(
+      "Amenity",
+      secondary="place_amenity",
+      backref="places"
 )
