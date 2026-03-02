@@ -15,3 +15,5 @@ class User(BaseModel):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+places = db.relationship("Place", backref="owner", cascade="all, delete")
+reviews = db.relationship("Review", backref="user", cascade="all, delete")
