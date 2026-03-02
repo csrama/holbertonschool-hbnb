@@ -1,41 +1,16 @@
 from flask import Flask
-from flask_bcrypt import Bcrypt
-from flask_jwt_extended import JWTManager
-from flask_sqlalchemy import SQLAlchemy
-from config import Config
+from config import config_dict
+from app.extensions import db, jwt, bcrypt
 
-# Initialize extensions
-bcrypt = Bcrypt()
-jwt = JWTManager()
-db = SQLAlchemy()
-
-def create_app(config_class=Config):
-    """Application factory with configuration"""
+def create_app(config_name="development"):
     app = Flask(__name__)
-    app.config.from_object(config_class)
-    
-    # Initialize extensions with app
-    bcrypt.init_app(app)
-    jwt.init_app(app)
+    app.config.from_object(config_dict[config_name])
+
     db.init_app(app)
-    
-    # Register blueprints
-    from app.api.v1 import api_bp
-    app.register_blueprint(api_bp, url_prefix='/api/v1')
-    
-    # JWT configuration
-    @jwt.user_identity_loader
-    def user_identity_lookup(user_id):
-        return user_id
-    
-    @jwt.user_lookup_loader
-    def user_lookup_callback(_jwt_header, jwt_data):
-        identity = jwt_data["sub"]
-        from app.models.user import User
-        return User.query.get(identity)
-    
-    # Create database tables
-    with app.app_context():
-        db.create_all()
-    
+    jwt.init_app(app)
+    bcrypt.init_app(app)
+
+    from app.api.v1 import api_v1
+    app.register_blueprint(api_v1, url_prefix="/api/v1")
+
     return app
