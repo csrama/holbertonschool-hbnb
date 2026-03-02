@@ -2,7 +2,10 @@
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt
 from hbnb.app.services.facade import HBnBFacade
+class Amenity(BaseModel):
+    __tablename__ = "amenities"
 
+    name = db.Column(db.String(100), nullable=False)
 # Create namespace for amenity operations
 amenity_namespace = Namespace('amenities', description='Amenity resource management')
 
