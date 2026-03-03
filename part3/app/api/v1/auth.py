@@ -1,26 +1,34 @@
-from flask_restx import Namespace, Resource, fields
-from flask import request
-from flask_jwt_extended import create_access_token
+from flask import Blueprint, request, jsonify
+from werkzeug.security import check_password_hash
 from app.models.user import User
 
-api = Namespace('auth', description='Authentication operations')
+auth_bp = Blueprint('auth', __name__)
 
-login_model = api.model('Login', {
-    'email': fields.String(required=True),
-    'password': fields.String(required=True),
-})
+@auth_bp.route('/', methods=['POST'])
+def login():
+    """
+    تسجيل الدخول:
+    يستقبل JSON:
+    {
+        "email": "...",
+        "password": "..."
+    }
+    """
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
 
-@api.route('/login')
-class LoginResource(Resource):
-    @api.expect(login_model)
-    def post(self):
-        data = request.get_json()
-        user = User.query.filter_by(email=data['email']).first()
-        if not user or not user.check_password(data['password']):
-            return {'error': 'Invalid credentials'}, 401
+    if not email or not password:
+        return jsonify({"message": "Email and password required"}), 400
 
-        access_token = create_access_token(
-            identity=user.id,
-            additional_claims={'is_admin': user.is_admin}
-        )
-        return {'access_token': access_token}, 200
+    user = User.query.filter_by(email=email).first()
+
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    # تحقق من الباسوورد
+    if not check_password_hash(user.password, password):
+        return jsonify({"message": "Invalid credentials"}), 401
+
+    # لو صح، أرجع توكن (يمكنك استخدام JWT لاحقًا)
+    return jsonify({"access_token": "dummy-token-for-testing"}), 200
