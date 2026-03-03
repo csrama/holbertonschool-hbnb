@@ -10,7 +10,8 @@ def create_app(config_name="development"):
     jwt.init_app(app)
     bcrypt.init_app(app)
 
-    from app.api.v1 import api_v1
-    app.register_blueprint(api_v1, url_prefix="/api/v1")
+    # Import the blueprint from api.v1
+    from app.api.v1 import bp_v1
+    app.register_blueprint(bp_v1, url_prefix="/api/v1")
 
     return app
