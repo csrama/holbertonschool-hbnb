@@ -19,8 +19,15 @@ user_model = api.model('User', {
 
 @api.route('/')
 class UserList(Resource):
+
     @api.expect(user_model)
     def post(self):
+
         data = request.get_json()
-        user, status = facade.create_user(data)  # facade.create_user now returns (dict, status)
+
+        if not data:
+            return {"error": "Invalid input"}, 400
+
+        user, status = facade.create_user(data)
+
         return user, status
