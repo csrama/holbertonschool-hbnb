@@ -5,6 +5,7 @@ from app.models.amenity import Amenity
 from app.extensions import bcrypt
 from app.persistence.repository import UserRepository, PlaceRepository, ReviewRepository, AmenityRepository
 
+
 class HBnBFacade:
     def __init__(self):
         self.users = UserRepository()
