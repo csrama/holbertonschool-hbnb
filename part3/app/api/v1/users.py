@@ -4,13 +4,13 @@ from app.models.user import User
 from app.services.facade import HBnBFacade
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-# تعريف namespace
+# Define the namespace
 api = Namespace('users', description='User operations')
 
-# إنشاء facade
+# Create the facade
 facade = HBnBFacade()
 
-# نموذج البيانات (Schema) للـ POST
+# Data model (Schema) for POST
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description="User's first name"),
     'last_name': fields.String(required=True, description="User's last name"),
@@ -24,7 +24,7 @@ class UserList(Resource):
 
     @api.expect(user_model)
     def post(self):
-        """إنشاء مستخدم جديد"""
+        """Create a new user"""
         data = request.get_json()
         if not data:
             return {"error": "Invalid input"}, 400
@@ -33,7 +33,7 @@ class UserList(Resource):
         return user_dict, status
 
     def get(self):
-        """جلب كل المستخدمين"""
+        """Retrieve all users"""
         users = facade.get_all_users()
-        # تحويل كل المستخدمين إلى dict
+        # Convert each user to dictionary
         return [user.to_dict() for user in users], 200
