@@ -35,5 +35,4 @@ class UserList(Resource):
     def get(self):
         """Retrieve all users"""
         users = facade.get_all_users()
-        # Convert each user to dictionary
-        return [user.to_dict() for user in users], 200
+        return users, 200
