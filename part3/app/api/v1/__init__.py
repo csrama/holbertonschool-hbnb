@@ -14,8 +14,8 @@ bp_v1 = Blueprint("api_v1", __name__)
 # Create RESTX API and attach it to the blueprint
 api_v1 = Api(bp_v1, title="HBnB API", version="1.0", description="HBnB API v1")
 
-# Add namespaces
-api_v1.add_namespace(users_ns)
-api_v1.add_namespace(places_ns)
-api_v1.add_namespace(amenities_ns)
-api_v1.add_namespace(reviews_ns)
+# Add namespaces with paths
+api_v1.add_namespace(users_ns, path="/users")
+api_v1.add_namespace(places_ns, path="/places")
+api_v1.add_namespace(amenities_ns, path="/amenities")
+api_v1.add_namespace(reviews_ns, path="/reviews")
