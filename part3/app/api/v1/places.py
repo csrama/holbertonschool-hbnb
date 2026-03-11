@@ -7,25 +7,47 @@ api = Namespace('places', description='Place operations')
 facade = HBnBFacade()
 
 place_model = api.model('Place', {
-    'name': fields.String(required=True),
-    'description': fields.String,
+    'name': fields.String(required=True, description="Place name"),
+    'price': fields.Float(required=True, description="Price per night"),
+    'latitude': fields.Float(required=True, description="Latitude"),
+    'longitude': fields.Float(required=True, description="Longitude"),
+    'description': fields.String(required=False, description="Description")
 })
 
 @api.route('/')
 class PlaceList(Resource):
 
-    def get(self):
-        places = facade.get_all_places()
-        return [p.to_dict() for p in places], 200
-
     @jwt_required()
     @api.expect(place_model)
     def post(self):
-        user_id = get_jwt_identity()
+        """Create a new place (requires JWT)"""
         data = request.get_json()
-
         if not data:
             return {"error": "Invalid input"}, 400
 
-        place = facade.create_place(user_id=user_id, **data)
-        return place.to_dict(), 201
+        user_id = get_jwt_identity()
+        place = facade.create_place(user_id, **data)
+        return {
+            "id": place.id,
+            "name": place.title,
+            "price": place.price,
+            "latitude": place.latitude,
+            "longitude": place.longitude,
+            "description": place.description,
+            "owner_id": place.owner_id
+        }, 201
+
+    def get(self):
+        """Retrieve all places"""
+        places = facade.places.get_all()
+        return [
+            {
+                "id": p.id,
+                "name": p.title,
+                "price": p.price,
+                "latitude": p.latitude,
+                "longitude": p.longitude,
+                "description": p.description,
+                "owner_id": p.owner_id
+            } for p in places
+        ], 200
