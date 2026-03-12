@@ -1,103 +1,45 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
-import re
-from typing import Any
-from app.extensions import db
-from .base_model import BaseModel
+from app.models.user import User
+from app.models.place import Place
+from app.models.review import Review
+from app.models.amenity import Amenity
 
-place_amenity = db.Table(   
-    'place_amenity',
-    db.Column('place_id',   db.String(36), db.ForeignKey('places.id'),    primary_key=True),
-    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True)
+from app.persistence.repository import (
+    UserRepository,
+    PlaceRepository,
+    ReviewRepository,
+    AmenityRepository
 )
 
-class Place(BaseModel):
-    """
-    Place entity with SQLAlchemy mapping.
-    
-    Attributes:
-        title (str): Title of the place (required, max 100)
-        description (str): Description of the place (optional, max 1000)
-        price (float): Price per night (required, positive, max 1,000,000)
-        latitude (float): Latitude coordinate (required, between -90 and 90)
-        longitude (float): Longitude coordinate (required, between -180 and 180)
-    """
+class HBnBFacade:
+    def __init__(self):
+        self.users = UserRepository()
+        self.places = PlaceRepository()
+        self.reviews = ReviewRepository()
+        self.amenities = AmenityRepository()
 
-    __tablename__ = 'places'
+    # USERS
+    def get_all_users(self):
+        return self.users.get_all()
 
-    title       = db.Column(db.String(100), nullable=False)
-    description = db.Column(db.Text,        nullable=True)
-    price       = db.Column(db.Float,       nullable=False)
-    latitude    = db.Column(db.Float,       nullable=False)
-    longitude   = db.Column(db.Float,       nullable=False)
+    def get_user(self, user_id):
+        return self.users.get_by_id(user_id)
 
-    owner_id  = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
-    reviews   = db.relationship('Review',  backref='place', lazy=True,
-                                cascade='all, delete-orphan')
-    amenities = db.relationship('Amenity', secondary=place_amenity, lazy='subquery',
-                                backref=db.backref('places', lazy=True))
+    # PLACES
+    def get_all_places(self):
+        return self.places.get_all()
 
-    def __init__(self, **kwargs):
-        """
-        Initialize a new Place with validation.
+    def get_place(self, place_id):
+        return self.places.get_by_id(place_id)
 
-        Raises:
-            ValueError: If validation fails for any field
-        """
-        super().__init__(**kwargs)
+    # REVIEWS
+    def get_reviews_for_place(self, place_id):
+        return self.reviews.get_by_place(place_id)
 
-        if not self.title or not self.title.strip():
-            raise ValueError("Title is required")
-        if len(self.title) > 100:
-            raise ValueError("Title must be under 100 characters")
-        self.title = self.title.strip()
-
-        if self.description and len(self.description) > 1000:
-            raise ValueError("Description must be under 1000 characters")
-        if self.description:
-            self.description = self.description.strip()
-
-        if self.price is None:
-            raise ValueError("Price is required")
-        if self.price <= 0:
-            raise ValueError("Price must be greater than 0")
-        if self.price > 1000000:
-            raise ValueError("Price must be under 1,000,000")
-
-        if self.latitude is None:
-            raise ValueError("Latitude is required")
-        if not (-90 <= self.latitude <= 90):
-            raise ValueError("Latitude must be between -90 and 90")
-
-        if self.longitude is None:
-            raise ValueError("Longitude is required")
-        if not (-180 <= self.longitude <= 180):
-            raise ValueError("Longitude must be between -180 and 180")
+    # AMENITIES
+    def get_all_amenities(self):
+        return self.amenities.get_all()
 
 
-    def get_average_rating(self) -> float:    
-        if not self.reviews:
-            return 0.0
-        return sum(r.rating for r in self.reviews) / len(self.reviews)
-
-
-    def to_dict(self) -> dict:    
-        base_dict = super().to_dict()
-        base_dict.update({
-            "title":       self.title,
-            "description": self.description,
-            "price":       self.price,
-            "latitude":    self.latitude,
-            "longitude":   self.longitude,
-            "owner_id":    self.owner_id,
-            "amenities":   [{"id": a.id, "name": a.name} for a in self.amenities],
-        })
-        return base_dict
-
-
-    def __str__(self) -> str:
-        return f"[Place] {self.title}"
-
-    def __repr__(self) -> str:
-        return f"<Place id={self.id} title={self.title}>"
+facade = HBnBFacade()
