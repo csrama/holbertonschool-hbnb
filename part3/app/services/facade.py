@@ -1,104 +1,114 @@
-from app.models.user import User
-from app.models.place import Place
-from app.models.review import Review
-from app.models.amenity import Amenity
-from app.extensions import bcrypt
-from app.persistence.repository import UserRepository, PlaceRepository, ReviewRepository, AmenityRepository
+#!/usr/bin/python3
 
+from __future__ import annotations
+import re
+from typing import Any
+from app.extensions import db
+from .base_model import BaseModel
 
-class HBnBFacade:
-    def __init__(self):
-        self.users = UserRepository()
-        self.places = PlaceRepository()
-        self.reviews = ReviewRepository()
-        self.amenities = AmenityRepository()
+place_amenity = db.Table(    #Task 8, Amaal
+    'place_amenity',
+    db.Column('place_id',   db.String(36), db.ForeignKey('places.id'),    primary_key=True),
+    db.Column('amenity_id', db.String(36), db.ForeignKey('amenities.id'), primary_key=True)
+)
 
-    # ---------------- USERS ----------------
-    def create_user(self, data: dict) -> tuple[dict, int]:
-        user = User(
-            first_name=data['first_name'],
-            last_name=data['last_name'],
-            email=data['email']
-        )
-        user.set_password(data['password'])
-        self.users.create(user)
-        return {
-            "id": user.id,
-            "created_at": user.created_at.isoformat(),
-            "updated_at": user.updated_at.isoformat()
-        }, 201
+class Place(BaseModel):
+    """
+    Place entity with SQLAlchemy mapping.
+    
+    Attributes:
+        title (str): Title of the place (required, max 100)
+        description (str): Description of the place (optional, max 1000)
+        price (float): Price per night (required, positive, max 1,000,000)
+        latitude (float): Latitude coordinate (required, between -90 and 90)
+        longitude (float): Longitude coordinate (required, between -180 and 180)
+    """
 
-    def get_all_users(self):
-        users = self.users.get_all()
-        return [
-            {
-                "id": u.id,
-                "first_name": u.first_name,
-                "last_name": u.last_name,
-                "email": u.email,
-                "created_at": u.created_at.isoformat(),
-                "updated_at": u.updated_at.isoformat()
-            } for u in users
-        ]
+    __tablename__ = 'places'
 
-    def get_user_by_email(self, email: str):
-        """Return user by email; create admin for testing if not exists"""
-        user = self.users.get_by_email(email)
-        if not user and email == "admin@test.com":
-            admin = User(
-                first_name="Admin",
-                last_name="User",
-                email=email
-            )
-            admin.set_password("admin123")
-            self.users.create(admin)
-            return admin
-        return user
+    # ==================== TASK 7: SQLAlchemy Columns ====================
+    title       = db.Column(db.String(100), nullable=False)
+    description = db.Column(db.Text,        nullable=True)
+    price       = db.Column(db.Float,       nullable=False)
+    latitude    = db.Column(db.Float,       nullable=False)
+    longitude   = db.Column(db.Float,       nullable=False)
 
-    # ---------------- PLACES ----------------
-    def create_place(self, user_id: str, **data):
-        place = Place(
-            title=data['name'],
-            price=data.get('price', 0.0),
-            latitude=data.get('latitude', 0.0),
-            longitude=data.get('longitude', 0.0),
-            owner_id=user_id,
-            description=data.get('description', "")
-        )
-        self.places.create(place)
-        return place
+    # ==================== TASK 8: Relationships - Amaal ====================
+    owner_id  = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
+    reviews   = db.relationship('Review',  backref='place', lazy=True,
+                                cascade='all, delete-orphan')
+    amenities = db.relationship('Amenity', secondary=place_amenity, lazy='subquery',
+                                backref=db.backref('places', lazy=True))
 
-    def get_places_by_user(self, user_id: str):
-        user = self.users.get_by_id(user_id)
-        return user.places if user else []
+    def __init__(self, **kwargs):
+        """
+        Initialize a new Place with validation.
 
-    # ---------------- REVIEWS ----------------
-    def create_review(self, user_id: str, **data):
-        review = Review(
-            text=data['text'],
-            rating=data['rating'],
-            user_id=user_id,
-            place_id=data['place_id']
-        )
-        self.reviews.create(review)
-        return review
+        Raises:
+            ValueError: If validation fails for any field
+        """
+        super().__init__(**kwargs)
 
-    def get_reviews_for_place(self, place_id: str):
-        place = self.places.get_by_id(place_id)
-        return place.reviews if place else []
+        # ============= Validation =============
+        # Title validation
+        if not self.title or not self.title.strip():
+            raise ValueError("Title is required")
+        if len(self.title) > 100:
+            raise ValueError("Title must be under 100 characters")
+        self.title = self.title.strip()
 
-    # ---------------- AMENITIES ----------------
-    def create_amenity(self, **data):
-        amenity = Amenity(
-            name=data['name'],
-            description=data.get('description', "")
-        )
-        self.amenities.create(amenity)
-        return amenity
+        # Description validation (optional)
+        if self.description and len(self.description) > 1000:
+            raise ValueError("Description must be under 1000 characters")
+        if self.description:
+            self.description = self.description.strip()
 
-    def get_amenities_for_place(self, place_id: str):
-        place = self.places.get_by_id(place_id)
-        return place.amenities if place else []
+        # Price validation
+        if self.price is None:
+            raise ValueError("Price is required")
+        if self.price <= 0:
+            raise ValueError("Price must be greater than 0")
+        if self.price > 1000000:
+            raise ValueError("Price must be under 1,000,000")
 
+        # Latitude validation
+        if self.latitude is None:
+            raise ValueError("Latitude is required")
+        if not (-90 <= self.latitude <= 90):
+            raise ValueError("Latitude must be between -90 and 90")
 
-facade = HBnBFacade()
+        # Longitude validation
+        if self.longitude is None:
+            raise ValueError("Longitude is required")
+        if not (-180 <= self.longitude <= 180):
+            raise ValueError("Longitude must be between -180 and 180")
+
+    # ============= Business Methods =============
+
+    def get_average_rating(self) -> float:    #Task 8, Amaal
+        if not self.reviews:
+            return 0.0
+        return sum(r.rating for r in self.reviews) / len(self.reviews)
+
+    # ============= Serialization =============
+
+    def to_dict(self) -> dict:    #Task 8, Amaal
+        base_dict = super().to_dict()
+        base_dict.update({
+            "title":       self.title,
+            "description": self.description,
+            "price":       self.price,
+            "latitude":    self.latitude,
+            "longitude":   self.longitude,
+            "owner_id":    self.owner_id,
+            "amenities":   [{"id": a.id, "name": a.name} for a in self.amenities],
+        })
+        return base_dict
+
+    # ============= Magic Methods =============
+
+    def __str__(self) -> str:
+        return f"[Place] {self.title}"
+
+    def __repr__(self) -> str:
+        return f"<Place id={self.id} title={self.title}>"
