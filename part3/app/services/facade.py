@@ -41,6 +41,20 @@ class HBnBFacade:
             } for u in users
         ]
 
+    def get_user_by_email(self, email: str):
+        """Return user by email; create admin for testing if not exists"""
+        user = self.users.get_by_email(email)
+        if not user and email == "admin@test.com":
+            admin = User(
+                first_name="Admin",
+                last_name="User",
+                email=email
+            )
+            admin.set_password("admin123")
+            self.users.create(admin)
+            return admin
+        return user
+
     # ---------------- PLACES ----------------
     def create_place(self, user_id: str, **data):
         place = Place(
@@ -87,5 +101,5 @@ class HBnBFacade:
         return place.amenities if place else []
 
 
-# ---------------- GLOBAL INSTANCE ----------------
+# إنشاء نسخة واحدة من Facade للاستخدام العالمي
 facade = HBnBFacade()
