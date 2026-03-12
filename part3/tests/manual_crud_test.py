@@ -58,7 +58,7 @@ with app.app_context():
 
     db.session.delete(read_place)
     db.session.commit()
-    print("Deleted Place:", read_place.title)
+    print("Deleted Place:", read_place.name)
 
     # ------------------ REVIEWS ------------------
     print("\n Reviews CRUD")
