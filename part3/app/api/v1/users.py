@@ -35,8 +35,7 @@ class UserList(Resource):
     @api.response(200, "List of users retrieved successfully")
     def get(self):
         """Retrieve a list of users - PUBLIC"""
-        return [user_to_dict(u) for u in facade.get_users()], 200
-
+    return [user_to_dict(u) for u in facade.get_all_users()], 200
     @api.expect(user_model, validate=True)
     @api.response(201, "User successfully created")
     @api.response(400, "Invalid input data")
