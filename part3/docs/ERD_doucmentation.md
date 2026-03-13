@@ -176,7 +176,72 @@ For optimal query performance, indexes should be created on:
 
 ---
 
-### 6. Conclusion
+## 6. ERD Diagram
+
+Below is the complete ERD created with Mermaid.js:
+
+```mermaid
+erDiagram
+    %% HBnB Database Schema
+    %% Project: Holberton School HBnB
+    %% Version: 1.0
+
+    %% Tables
+    USERS {
+        string id PK "Primary Key"
+        string first_name "User's first name"
+        string last_name "User's last name"
+        string email UK "Unique email address"
+        string password "Hashed password"
+        boolean is_admin "Admin privileges flag"
+        datetime created_at "Record creation timestamp"
+        datetime updated_at "Record last update timestamp"
+    }
+
+    PLACES {
+        string id PK "Primary Key"
+        string title "Place title/name"
+        string description "Detailed description"
+        float price "Price per night"
+        float latitude "Geographic latitude"
+        float longitude "Geographic longitude"
+        string owner_id FK "References USERS.id (owner)"
+        datetime created_at "Record creation timestamp"
+        datetime updated_at "Record last update timestamp"
+    }
+
+    REVIEWS {
+        string id PK "Primary Key"
+        string user_id FK "References USERS.id (author)"
+        string place_id FK "References PLACES.id"
+        string text "Review content"
+        datetime created_at "Review creation timestamp"
+        datetime updated_at "Record last update timestamp"
+    }
+
+    AMENITIES {
+        string id PK "Primary Key"
+        string name UK "Unique amenity name"
+        datetime created_at "Record creation timestamp"
+        datetime updated_at "Record last update timestamp"
+    }
+
+    PLACE_AMENITY {
+        string place_id PK, FK "References PLACES.id"
+        string amenity_id PK, FK "References AMENITIES.id"
+        datetime created_at "Junction record creation timestamp"
+    }
+
+    %% Relationships
+    USERS ||--o{ PLACES : "1 user owns many places"
+    USERS ||--o{ REVIEWS : "1 user writes many reviews"
+    PLACES ||--o{ REVIEWS : "1 place receives many reviews"
+    PLACES ||--o{ PLACE_AMENITY : "1 place has many amenities"
+    AMENITIES ||--o{ PLACE_AMENITY : "1 amenity belongs to many places"
+```
+
+---
+### 7. Conclusion
 The ERD provides a complete and accurate representation of the HBnB database schema. It captures all required entities and their relationships, ensuring:
 
 - Data integrity through proper primary and foreign key constraints
