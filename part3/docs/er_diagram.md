@@ -160,7 +160,6 @@ For optimal query performance, indexes should be created on:
 
 Below is the complete ERD created with Mermaid.js:
 
-mermaid
 erDiagram
     %% Tables
     USER {
@@ -200,8 +199,6 @@ erDiagram
     PLACE_AMENITY {
         string place_id FK "Foreign Key to Place.id"
         string amenity_id FK "Foreign Key to Amenity.id"
-        %% Composite Primary Key
-        PK (place_id, amenity_id) "Composite Primary Key ensures unique combinations"
     }
 
     %% Relationships
@@ -210,5 +207,3 @@ erDiagram
     PLACE ||--o{ REVIEW : "1 place receives many reviews"
     PLACE ||--o{ PLACE_AMENITY : "1 place can have many amenities"
     AMENITY ||--o{ PLACE_AMENITY : "1 amenity can belong to many places"
-
-    %% Note: Create indexes on all FK columns for better query performance
