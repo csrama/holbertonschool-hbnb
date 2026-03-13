@@ -2,7 +2,8 @@
 
 from flask_restx import Namespace, Resource, fields
 from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
-from app.services.facade import facade
+from app.services.facade import HBnBFacade
+facade = HBnBFacade()
 
 api = Namespace("places", description="Place operations")
 
