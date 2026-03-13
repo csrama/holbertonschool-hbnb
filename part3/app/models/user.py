@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-"""User model with SQLAlchemy and password hashing - Tasks 1 & 6"""
 
 from __future__ import annotations
 
@@ -29,7 +28,6 @@ class User(BaseModel):
         is_admin (bool): Admin privileges flag (default False)
     """
     
-    # ==================== TASK 6: SQLAlchemy Columns ====================
     __tablename__ = 'users'
 
     first_name = db.Column(db.String(50), nullable=False)
@@ -38,13 +36,11 @@ class User(BaseModel):
     password = db.Column(db.String(128), nullable=False)
     is_admin = db.Column(db.Boolean, default=False)
 
-    # ==================== TASK 8: Relationships - Amaal ====================
     places  = db.relationship('Place',  backref='owner', lazy=True,
                           cascade='all, delete-orphan')
     reviews = db.relationship('Review', backref='user',  lazy=True,
                           cascade='all, delete-orphan')
 
-    # ==================== TASK 1: Password Hashing ====================
 
     def __init__(self, **kwargs):
         """Initialize a new User."""
