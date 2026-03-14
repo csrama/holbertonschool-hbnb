@@ -226,3 +226,4 @@ Junction table for many-to-many relationship between PLACES and AMENITIES.
 - Raghad Almalki
 - Jana Bakri
 - Rama Alsheheri
+- 
