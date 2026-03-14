@@ -15,7 +15,7 @@
 
 ---
 
-## Project Overview
+# Project Overview
 
 The HBnB project is a platform similar to Airbnb that allows users to list properties (places) and leave reviews. This document presents the complete database schema design, including all entities, attributes, and relationships.
 
