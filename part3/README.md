@@ -1,4 +1,3 @@
-
 .# HBnB Project - Database Schema Documentation
 
 ## Holberton School HBnB | Part 3
