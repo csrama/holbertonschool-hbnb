@@ -135,5 +135,8 @@ CORS(app)
 ---
 
 ## Author
+## Rama ALahehri
+## Jana Bakri
+## Raghad ALmalki
 
 HBnB Project (Part 4)
