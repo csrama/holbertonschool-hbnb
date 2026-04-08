@@ -1,41 +1,39 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - HBnB</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - HBnB</title>
+  <link rel="icon" href="images/icon.png">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <div class="logo">
-                <img src="images/logo.png" alt="HBnB Logo">
-                <h1>HBnB</h1>
-            </div>
-        </div>
-    </header>
-
-    <div class="login-container">
-        <h2>Login</h2>
-        <form id="login-form" class="login-form">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" class="login-button-submit">Login</button>
-            <div id="error-message" class="error-message"></div>
-        </form>
+  <header>
+    <div class="header-container">
+      <img src="images/logo.png" alt="HBnB Logo" class="logo">
     </div>
+  </header>
 
-    <footer>
-        <p>&copy; 2025 HBnB. All rights reserved.</p>
-    </footer>
+  <main class="login-container">
+    <section class="card login-card">
+      <form id="login-form">
+        <h2>Login</h2>
+        <div class="form-group">
+          <input type="email" id="email" placeholder="Email" required>
+        </div>
+        <div class="form-group">
+          <input type="password" id="password" placeholder="Password" required>
+        </div>
+        <button type="submit" class="submit-button">Login</button>
+      </form>
+    </section>
+  </main>
 
-    <script src="js/scripts.js"></script>
+  <footer>
+    <p>© 2025 HBnB Evolution. All rights reserved.</p>
+  </footer>
+
+  <script src="js/auth.js"></script>
 </body>
 </html>
