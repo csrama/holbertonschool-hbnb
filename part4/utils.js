@@ -3,14 +3,19 @@
 
 // ===== Dynamically specify API link (supports localhost and GitHub Codespaces) =====
 function getBaseUrl() {
-    const { origin } = window.location;
+    const { origin, hostname } = window.location;
+    
+    // Supports GitHub Codespaces
     if (origin.includes('github.dev') || origin.includes('app.github.dev')) {
         return origin.replace(/-(3000|5500|8080)\./, '-5000.');
     }
+    
+    if (hostname.match(/^\d+\.\d+\.\d+\.\d+$/)) {
+        return `http://${hostname}:5000`;
+    }
+    
     return 'http://127.0.0.1:5000';
 }
-
-const API_URL = `${getBaseUrl()}/api/v1`;
 
 // ===== cookie function =====
 function getCookie(name) {
