@@ -1,17 +1,43 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>HBnB</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HBnB - Available Places</title>
+  <link rel="icon" href="images/icon.png">
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+  <header>
+    <div class="header-container">
+      <img src="images/logo.png" alt="HBnB Logo" class="logo">
+      <a href="login.html" class="login-button" id="login-link">Login</a>
+    </div>
+  </header>
 
-<h1>Places</h1>
+  <main>
+    <section class="hero">
+      <h1>Available Places</h1>
+      
+      <div class="filter-section card">
+        <label for="price-filter">Max Price:</label>
+        <select id="price-filter">
+          <option value="all">All</option>
+          <option value="10">10$</option>
+          <option value="50">50$</option>
+          <option value="100">100$</option>
+        </select>
+      </div>
+    </section>
 
-<a href="login.html" id="login-link">Login</a>
+    <section id="places-list" class="places-grid-container">
+      </section>
+  </main>
 
-<div id="places-list"></div>
+  <footer>
+    <p>© 2026 HBnB Evolution. All rights reserved.</p>
+  </footer>
 
-<script src="config.js"></script>
-<script src="scripts.js"></script>
+  <script src="js/places.js"></script>
 </body>
 </html>
