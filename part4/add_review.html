@@ -17,19 +17,21 @@
 
   <main>
     <div class="review-container">
-      <h1 id="place-name-header">Reviewing: Beautiful Beach House</h1>
+      <h1 id="place-name-header">Reviewing: Beautiful mountain House</h1>
       
       <section class="card add-review-card">
         <h2>Add a Review</h2>
         <form id="review-form">
+          <input type="hidden" id="place-id">
+          
           <div class="form-group">
             <label for="review-text">Your Review:</label>
             <textarea id="review-text" rows="4" placeholder="Write your experience here..." required></textarea>
           </div>
           
           <div class="form-group">
-            <label for="review-rating">Rating:</label>
-            <select id="review-rating" required>
+            <label for="rating">Rating:</label>
+            <select id="rating" required>
               <option value="1">1 Star</option>
               <option value="2">2 Stars</option>
               <option value="3">3 Stars</option>
@@ -48,6 +50,7 @@
     <p>© 2026 HBnB Evolution. All rights reserved.</p>
   </footer>
 
-  <script src="js/add_review.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/scripts.js"></script>
 </body>
 </html>

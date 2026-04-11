@@ -1,17 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Admin</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - HBnB</title>
+  <link rel="icon" href="images/icon.png">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+/* Additional style for the control panel */
+      .admin-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .admin-table th, .admin-table td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: left;
+    }
+    .admin-table th {
+      background-color: #f4f4f4;
+    }
+    .btn-delete {
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .btn-edit {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .dashboard-section {
+      margin: 30px 0;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <div class="header-container">
+      <img src="images/logo.png" alt="HBnB Logo" class="logo">
+      <a href="#" class="login-button" id="logout-btn" onclick="logout()">Logout</a>
+    </div>
+  </header>
 
-<h1>Admin Panel</h1>
+  <main class="container">
+    <h1>Admin Dashboard</h1>
+    
+    <div id="dashboard-content">
+<!-- Users Section -->
+        <div class="dashboard-section">
+        <h2>Users Management</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-list">
+            <tr><td colspan="5">Loading users...</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-<div id="admin-content">
-    Admin tools here
-</div>
+      <!-- Places Section -->
+      <div class="dashboard-section">
+        <h2>Places Management</h2>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Owner</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="admin-places-list">
+            <tr><td colspan="4">Loading places...</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-<script src="config.js"></script>
-<script src="admin.js"></script>
+      <!-- Amenities Section -->
+      <div class="dashboard-section">
+        <h2>Amenities Management</h2>
+        
+<!-- New Amenities addition form -->
+          <form id="create-amenity-form" style="margin-bottom: 20px;">
+          <h3>Add New Amenity</h3>
+          <input type="text" id="amenity-name" placeholder="Amenity Name" required>
+          <input type="text" id="amenity-description" placeholder="Description (optional)">
+          <button type="submit">Create Amenity</button>
+        </form>
+
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="amenities-list">
+            <tr><td colspan="3">Loading amenities...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2026 HBnB Evolution. All rights reserved.</p>
+  </footer>
+
+  <script src="js/utils.js"></script>
+  <script src="js/admin.js"></script>
 </body>
 </html>
