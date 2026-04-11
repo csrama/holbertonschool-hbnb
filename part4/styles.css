@@ -8,19 +8,13 @@
 }
 
 body {
-<<<<<<< HEAD
-    font-family: 'Inter', sans-serif;
-    background-color: #f8f9fa;
-    color: #d81818;
-    line-height: 1.6;
-=======
+
     font-family: 'Arial', sans-serif;
     background-color: var(--light-gray);
     margin: 0;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
->>>>>>> 4a5154de8c5a129efe9ec48022e72a0af859c8ac
 }
 
 /* header, footer */
