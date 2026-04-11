@@ -22,7 +22,7 @@ def main():
     print("HBnB Database Setup")
     print("="*60)
 
-    app = create_app(DevelopmentConfig)
+    app = create_app("development")
 
     with app.app_context():
         try:
