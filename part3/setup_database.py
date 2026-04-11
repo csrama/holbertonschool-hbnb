@@ -37,36 +37,36 @@ def main():
             print("\n📝 Creating users...")
 
             # Admin user (is_admin=True)
-            admin = User(
-                id=str(uuid.uuid4()),
-                first_name='Raghad',
-                last_name='Almalki',
-                email='raghad@hbnb.com',
-                is_admin=True
-            )
-            admin.password = 'admin123'
-            db.session.add(admin)
+          # Admin user
+admin = User(
+    id=str(uuid.uuid4()),
+    first_name='Raghad',
+    last_name='Almalki',
+    email='raghad@hbnb.com',
+    is_admin=True
+)
+admin.hash_password('admin123')
+db.session.add(admin)
 
-            jana = User(
-                id=str(uuid.uuid4()),
-                first_name='Jana',
-                last_name='Bakri',
-                email='jana@hbnb.com',
-                is_admin=False
-            )
-            jana.password = 'jana123'
-            db.session.add(jana)
+jana = User(
+    id=str(uuid.uuid4()),
+    first_name='Jana',
+    last_name='Bakri',
+    email='jana@hbnb.com',
+    is_admin=False
+)
+jana.hash_password('jana123')
+db.session.add(jana)
 
-            rama = User(
-                id=str(uuid.uuid4()),
-                first_name='Rama',
-                last_name='Alshahri',
-                email='rama@hbnb.com',
-                is_admin=False
-            )
-            rama.password = 'rama123'
-            db.session.add(rama)
-
+rama = User(
+    id=str(uuid.uuid4()),
+    first_name='Rama',
+    last_name='Alshahri',
+    email='rama@hbnb.com',
+    is_admin=False
+)
+rama.hash_password('rama123')
+db.session.add(rama)
             db.session.commit()
             print(f"✅ Created {User.query.count()} users")
 
