@@ -1,5 +1,5 @@
 // ===== Configuration =====
-const API_URL = 'http://localhost:5000/api/v1';
+const API_URL = 'http://127.0.0.1:5000/api/v1';
 
 // ===== Cookie Helpers =====
 function getCookie(name) {
@@ -29,9 +29,7 @@ function initLoginForm() {
 
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-
-        // FIX:  (login-error-message)
-        const errorDiv = document.getElementById('error-message');
+        const errorDiv = document.getElementById('error-message'); // ✅ FIXED
 
         try {
             const res = await fetch(`${API_URL}/auth/login`, {
@@ -42,36 +40,25 @@ function initLoginForm() {
 
             const data = await res.json();
 
-            // Debug 
-            console.log("LOGIN RESPONSE:", data);
-
             if (res.ok) {
-                // Save token
                 setCookie('token', data.access_token);
-
-                console.log('Login successful, token saved');
-
-                // Redirect
                 window.location.href = 'index.html';
             } else {
                 if (errorDiv) {
-                    errorDiv.style.display = "block";
+                    errorDiv.style.display = 'block';
                     errorDiv.textContent = data.error || 'Login failed';
                 } else {
-                    alert('Login failed: ' + (data.error || 'Unknown error'));
+                    alert('Login failed');
                 }
             }
         } catch (err) {
             const msg = 'Network error. Make sure backend is running on port 5000';
-
             if (errorDiv) {
-                errorDiv.style.display = "block";
+                errorDiv.style.display = 'block';
                 errorDiv.textContent = msg;
             } else {
                 alert(msg);
             }
-
-            console.error(err);
         }
     });
 }
@@ -107,30 +94,27 @@ async function fetchPlaces() {
                 <button class="details-button" data-id="${place.id}">View Details</button>
             `;
 
-            card.querySelector('.details-button').onclick = () => {
+            const btn = card.querySelector('.details-button');
+            btn.onclick = () => {
                 window.location.href = `place.html?id=${place.id}`;
             };
 
             container.appendChild(card);
         });
 
-        // Price filter
         const filter = document.getElementById('price-filter');
         if (filter) {
             filter.onchange = () => {
                 const maxPrice = filter.value;
-
                 document.querySelectorAll('.place-card').forEach(card => {
                     const price = parseFloat(card.getAttribute('data-price'));
-                    card.style.display =
-                        (maxPrice === 'all' || price <= maxPrice) ? 'flex' : 'none';
+                    card.style.display = (maxPrice === 'all' || price <= maxPrice) ? 'flex' : 'none';
                 });
             };
         }
 
     } catch (err) {
-        console.error(err);
-        container.innerHTML = '<p>Error loading places. Make sure backend is running.</p>';
+        container.innerHTML = '<p>Error loading places.</p>';
     }
 }
 
@@ -145,7 +129,15 @@ async function loadPlaceDetails() {
     }
 
     try {
-        const res = await fetch(`${API_URL}/places/${placeId}`);
+        const token = getCookie('token'); // ✅ ADD TOKEN
+
+        // ✅ FIXED: send token
+        const res = await fetch(`${API_URL}/places/${placeId}`, {
+            headers: token ? {
+                'Authorization': `Bearer ${token}`
+            } : {}
+        });
+
         if (!res.ok) throw new Error('Place not found');
 
         const place = await res.json();
@@ -163,12 +155,16 @@ async function loadPlaceDetails() {
             </div>
         `;
 
-        // Reviews
-        const reviewsRes = await fetch(`${API_URL}/reviews/places/${placeId}/reviews`);
+        // ✅ FIXED: send token in reviews
+        const reviewsRes = await fetch(`${API_URL}/reviews/places/${placeId}/reviews`, {
+            headers: token ? {
+                'Authorization': `Bearer ${token}`
+            } : {}
+        });
+
         const reviews = await reviewsRes.json();
 
         const reviewsContainer = document.getElementById('reviews-list');
-
         if (reviewsContainer) {
             if (!reviews || reviews.length === 0) {
                 reviewsContainer.innerHTML = '<p>No reviews yet.</p>';
@@ -182,22 +178,19 @@ async function loadPlaceDetails() {
             }
         }
 
-        // show review form if logged in
-        const token = getCookie('token');
+        // Show review form if logged in
         const addSection = document.getElementById('add-review-section');
-
         if (addSection && token) {
             addSection.style.display = 'block';
             document.getElementById('place-id').value = placeId;
         }
 
     } catch (err) {
-        console.error(err);
         document.getElementById('place-details').innerHTML = '<p>Error loading place details.</p>';
     }
 }
 
-// ===== REVIEW FORM =====
+// ===== ADD REVIEW =====
 function initReviewForm() {
     const form = document.getElementById('review-form');
     if (!form) return;
@@ -206,7 +199,6 @@ function initReviewForm() {
         e.preventDefault();
 
         const token = getCookie('token');
-
         if (!token) {
             alert('Please login first');
             window.location.href = 'login.html';
@@ -224,11 +216,7 @@ function initReviewForm() {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({
-                    text,
-                    rating: parseInt(rating),
-                    place_id: placeId
-                })
+                body: JSON.stringify({ text, rating: parseInt(rating), place_id: placeId })
             });
 
             if (res.ok) {
@@ -239,40 +227,16 @@ function initReviewForm() {
                 const error = await res.json();
                 alert(error.error || 'Failed to add review');
             }
-
         } catch (err) {
             alert('Network error');
         }
     });
 }
 
-// ===== AUTH UI =====
-function checkAuthForIndex() {
-    const token = getCookie('token');
-
-    const loginLink = document.getElementById('login-link');
-    const adminLink = document.getElementById('admin-link');
-
-    if (token) {
-        if (loginLink) loginLink.style.display = 'none';
-
-        try {
-            const payload = JSON.parse(atob(token.split('.')[1]));
-
-            if (payload.is_admin && adminLink) {
-                adminLink.style.display = 'inline-block';
-            }
-        } catch (e) {}
-    } else {
-        if (loginLink) loginLink.style.display = 'inline-block';
-        if (adminLink) adminLink.style.display = 'none';
-    }
-}
-
-// ===== HELPERS =====
+// ===== HELPER =====
 function escapeHtml(str) {
     if (!str) return '';
-    return str.replace(/[&<>]/g, function (m) {
+    return str.replace(/[&<>]/g, function(m) {
         if (m === '&') return '&amp;';
         if (m === '<') return '&lt;';
         if (m === '>') return '&gt;';
@@ -282,16 +246,8 @@ function escapeHtml(str) {
 
 // ===== INIT =====
 document.addEventListener('DOMContentLoaded', () => {
-
-    if (document.getElementById('login-form')) {
-        initLoginForm();
-    }
-
-    if (document.getElementById('places-list')) {
-        checkAuthForIndex();
-        fetchPlaces();
-    }
-
+    if (document.getElementById('login-form')) initLoginForm();
+    if (document.getElementById('places-list')) fetchPlaces();
     if (document.getElementById('place-details')) {
         loadPlaceDetails();
         initReviewForm();
