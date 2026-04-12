@@ -329,7 +329,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (response.ok) {
                     const data = await response.json();
                     setCookie('token', data.access_token);
-                    window.location.href = 'index.html';
+                    window.location.href = document.referrer || 'index.html';
                 } else {
                     errorMsg.style.display = 'block';
                     errorMsg.textContent = 'Invalid email or password. Please try again.';
