@@ -1,0 +1,165 @@
+/* General site layouts */
+:root {
+    --primary-orange: #ff9900;
+    --light-gray: #f4f4f4;
+    --dark-text: #333;
+    --white: #ffffff;
+    --border: #dddddd;
+}
+
+body {
+
+    font-family: 'Arial', sans-serif;
+    background-color: var(--light-gray);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* header, footer */
+header, footer {
+    background-color: var(--primary-orange);
+    color: var(--white);
+    padding: 15px 0;
+}
+
+.header-content {
+    max-width: 1200px; /* Increased width */
+    margin: 0 auto;
+<<<<<<< HEAD
+    padding: 20px;
+}
+
+/* ===== Header ===== */
+header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 0;
+    box-shadow: 0 4px 6px rgba(146, 12, 194, 0.1);
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+=======
+>>>>>>> 4a5154de8c5a129efe9ec48022e72a0af859c8ac
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo {
+    height: 40px;
+}
+
+.login-button {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer {
+    text-align: center;
+    margin-top: auto;
+    padding: 20px 0;
+}
+
+/* main */
+main {
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column; /* To allow the title to be above the content */
+    align-items: center;
+}
+
+/* Large headings (such as the Places and Ratings page) */
+h1, h2 {
+    color: var(--dark-text);
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Standardized format (Login, Add Review, Place Details) */
+.card, .login-card, .add-review-card, .place-details-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 500px; /* width for models */
+    margin: 0 auto;
+}
+
+#places-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    gap: 30px;
+    width: 100%;
+    max-width: 1100px;
+    margin-top: 20px;
+}
+
+.place-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.place-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Input field formatting */
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 8px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+/* button */
+.submit-button, .details-button {
+    background-color: var(--primary-orange);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    width: 100%;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.submit-button:hover, .details-button:hover {
+    background-color: #e68a00;
+}
+
+/* for the review page (add_review.html) */
+.review-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#place-name-header {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
