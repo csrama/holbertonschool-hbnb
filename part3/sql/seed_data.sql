@@ -2,7 +2,7 @@
 INSERT INTO users (id, first_name, last_name, email, password, is_admin)
 VALUES (
     '1', 'Admin', 'User', 'admin@hbnb.com',
-    '$2b$12$examplehashedpassword123', -- يمكن تغييره لاحقًا
+    '$2b$12$examplehashedpassword123', -- 
     TRUE
 );
 
