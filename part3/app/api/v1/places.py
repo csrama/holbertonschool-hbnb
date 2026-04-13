@@ -32,6 +32,7 @@ def place_to_dict(place):
         "latitude":    place.latitude,
         "longitude":   place.longitude,
         "owner_id":    getattr(place, 'owner_id', None),
+        "amenities":   [{"id": a.id, "name": a.name} for a in getattr(place, 'amenities', [])]
     }
 
 
