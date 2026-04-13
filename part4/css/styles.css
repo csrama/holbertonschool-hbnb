@@ -1,16 +1,18 @@
 /* General site layouts */
 :root {
-    --primary-orange: #ff9900;
-    --light-gray: #f4f4f4;
-    --dark-text: #333;
-    --white: #ffffff;
-    --border: #dddddd;
+    --primary-purple: #8a2be2; /* Professional Purple */
+    --primary-purple-hover: #7b1fa2;
+    --bg-dark: #121212; /* Deep Black */
+    --surface: #1e1e1e; /* Dark Gray for cards */
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --border: #333333;
 }
 
 body {
-
-    font-family: 'Arial', sans-serif;
-    background-color: var(--light-gray);
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
     margin: 0;
     display: flex;
     flex-direction: column;
@@ -19,9 +21,10 @@ body {
 
 /* header, footer */
 header, footer {
-    background-color: var(--primary-orange);
-    color: var(--white);
+    background-color: var(--surface);
+    color: var(--text-primary);
     padding: 15px 0;
+    border-bottom: 1px solid var(--border);
 }
 
 .header-content {
@@ -35,44 +38,57 @@ header, footer {
 
 .logo {
     height: 40px;
+    filter: invert(1); /* Invert logo for dark mode if it's a black png */
 }
 
 .login-button {
-    color: white;
+    color: var(--primary-purple);
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+    border: 1px solid var(--primary-purple);
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: var(--primary-purple);
+    color: #ffffff;
 }
 
 footer {
     text-align: center;
     margin-top: auto;
     padding: 20px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: none;
 }
 
 /* main */
 main {
     padding: 40px 20px;
     display: flex;
-    flex-direction: column; /* To allow the title to be above the content */
+    flex-direction: column;
     align-items: center;
 }
 
 /* Large headings (such as the Places and Ratings page) */
 h1, h2 {
-    color: var(--dark-text);
+    color: var(--text-primary);
     text-align: center;
     margin-bottom: 30px;
+    font-weight: 700;
 }
 
 /* Standardized format (Login, Add Review, Place Details) */
 .card, .login-card, .add-review-card, .place-details-card {
-    background: var(--white);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
     padding: 30px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     width: 100%;
-    max-width: 500px; /* width for models */
+    max-width: 500px;
     margin: 0 auto;
 }
 
@@ -86,51 +102,71 @@ h1, h2 {
 }
 
 .place-card {
-    background: var(--white);
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 12px;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .place-card:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-purple);
+}
+
+.place-info p {
+    color: var(--text-secondary);
+}
+.place-info strong {
+    color: var(--text-primary);
 }
 
 /* Input field formatting */
 .form-group {
     margin-bottom: 20px;
     text-align: left;
+    color: var(--text-secondary);
 }
 
 input, textarea, select {
     width: 100%;
     padding: 12px;
     margin-top: 8px;
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
     border: 1px solid var(--border);
     border-radius: 5px;
     box-sizing: border-box;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+    box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
 }
 
 /* button */
 .submit-button, .details-button {
-    background-color: var(--primary-orange);
-    color: white;
+    background-color: var(--primary-purple);
+    color: #ffffff;
     border: none;
     border-radius: 5px;
     padding: 12px 20px;
     width: 100%;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
     text-decoration: none;
     display: inline-block;
 }
 
 .submit-button:hover, .details-button:hover {
-    background-color: #e68a00;
+    background-color: var(--primary-purple-hover);
+    transform: translateY(-2px);
 }
 
 /* for the review page (add_review.html) */
@@ -143,31 +179,40 @@ input, textarea, select {
 
 #place-name-header {
     font-size: 2rem;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    color: var(--text-primary);
 }
 
 /* Amenities Styling */
 .amenities-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
     margin-top: 15px;
 }
 
 .amenity-tag {
-    background-color: var(--primary-orange);
-    color: var(--white);
+    background-color: rgba(138, 43, 226, 0.15);
+    color: var(--primary-purple);
     padding: 6px 14px;
     border-radius: 20px;
     font-size: 0.9em;
     font-weight: 600;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
     cursor: default;
+    margin: 0 10px 10px 0; 
 }
 
 .amenity-tag:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    background-color: #e68a00;
+    box-shadow: 0 4px 12px rgba(138, 43, 226, 0.2);
+    background-color: var(--primary-purple);
+    color: #ffffff;
+}
+
+.price {
+    color: var(--primary-purple);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
