@@ -24,6 +24,10 @@ place_update_model = api.model("PlaceUpdate", {
 })
 
 def place_to_dict(place):
+    owner_name = None
+    if hasattr(place, 'owner') and place.owner:
+        owner_name = place.owner.get_full_name()
+
     return {
         "id":          place.id,
         "title":       place.title,
@@ -32,6 +36,7 @@ def place_to_dict(place):
         "latitude":    place.latitude,
         "longitude":   place.longitude,
         "owner_id":    getattr(place, 'owner_id', None),
+        "owner_name":  owner_name,
         "amenities":   [{"id": a.id, "name": a.name} for a in getattr(place, 'amenities', [])]
     }
 
