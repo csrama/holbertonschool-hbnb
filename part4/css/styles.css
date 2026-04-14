@@ -223,28 +223,32 @@ input:focus, textarea:focus, select:focus {
 .amenity-tag {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     background-color: rgba(138, 43, 226, 0.15);
     color: var(--primary-purple);
-    padding: 6px 14px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-weight: 600;
     border: 1px solid rgba(138, 43, 226, 0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
     cursor: default;
-    margin: 0 10px 10px 0;
+    margin: 0 8px 8px 0;
 }
 
-.amenity-icon {
-    width: 18px;
-    height: 18px;
+.amenity-icon, .amenity-icon-fa {
+    width: 14px;
+    height: 14px;
+    font-size: 1.0em;
     object-fit: contain;
     filter: invert(29%) sepia(98%) saturate(1200%) hue-rotate(255deg) brightness(90%);
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.amenity-tag:hover .amenity-icon {
+.amenity-tag:hover .amenity-icon, .amenity-tag:hover .amenity-icon-fa {
     filter: brightness(0) invert(1);
 }
 
