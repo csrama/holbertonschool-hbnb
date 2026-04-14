@@ -233,7 +233,7 @@ async function fetchReviews(token, placeId) {
 }
 
 function displayReviews(reviews) {
-    const section = document.getElementById('reviews');
+    const section = document.getElementById('reviews-list');
     if (!section) return;
 
     section.innerHTML = '<h2>Reviews</h2>';
@@ -260,7 +260,7 @@ function displayReviews(reviews) {
 }
 
 /*ADD REVIEW HELPERS */
-function checkAuthAddReview() {
+function checkAuthentication() {
     const token = getCookie('token');
 
     if (!token) {
@@ -271,8 +271,24 @@ function checkAuthAddReview() {
     return token;
 }
 
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch(e) {
+        return null;
+    }
+}
+
 async function submitReview(token, placeId, text, rating) {
     try {
+        const payload = parseJwt(token);
+        const userId = payload ? payload.sub : "";
+
         const response = await fetch(`${API_URL}/reviews/`, {
             method: 'POST',
             headers: {
@@ -282,7 +298,8 @@ async function submitReview(token, placeId, text, rating) {
             body: JSON.stringify({
                 text: text,
                 rating: rating,
-                place_id: placeId
+                place_id: placeId,
+                user_id: userId
             })
         });
 
@@ -359,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
             loginLink.style.display = token ? 'none' : 'block';
         }
 
-        const addReviewSection = document.getElementById('add-review');
+        const addReviewSection = document.getElementById('add-review-section');
         if (addReviewSection) {
             addReviewSection.style.display = token ? 'block' : 'none';
         }
@@ -384,13 +401,13 @@ document.addEventListener('DOMContentLoaded', () => {
     /* -- ADD REVIEW PAGE -- */
     const addReviewPageForm = document.getElementById('review-form');
     if (addReviewPageForm && !document.getElementById('place-details')) {
-        const token = checkAuthAddReview();
+        const token = checkAuthentication();
         const placeId = getPlaceIdFromURL();
 
         addReviewPageForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
-            const text = document.getElementById('review').value.trim();
+            const text = document.getElementById('review-text').value.trim();
             const rating = parseInt(document.getElementById('rating').value, 10);
 
             await submitReview(token, placeId, text, rating);
