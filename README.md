@@ -1,6 +1,7 @@
 
 ## Introduction: HBnB Evolution
 
+
 **HBnB Evolution is a modern hospitality platform designed to facilitate secure, scalable, and efficient short-term accommodation booking. Built on clean software architecture principles, the system connects hosts and guests through a reliable and well-structured digital ecosystem while ensuring maintainability, performance, and extensibility.**
 
 *This document presents the technical architecture and design foundations that support both current system requirements and future evolution.*
@@ -319,7 +320,7 @@ Analytics Integration: Usage tracking and business intelligence
 ## Contributors 
 
 - *Raghad Almalki* – https://github.com/Raghad717  
-- *Rama Alshahri* – https://github.com/csrama  
+- *Rama Alshehri* – https://github.com/csrama  
 - *Jana Bakri* – https://github.com/janabakri
 
 - # HBnB - RESTful API Backend
@@ -662,5 +663,5 @@ the platform now provides a strong foundation for future development, including 
 ## Contributors 
 
 - *Raghad Almalki* – https://github.com/Raghad717  
-- *Rama Alshahri* – https://github.com/csrama  
+- *Rama Alshehri* – https://github.com/csrama  
 - *Jana Bakri* – https://github.com/janabakri

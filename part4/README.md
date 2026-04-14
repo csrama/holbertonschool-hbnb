@@ -177,7 +177,7 @@ No places showing	Create places in database using Python script
 
 Author
 
-Rama Alshahri – @csrama
+Rama Alshehri – @csrama
 
 Jana Bakri – @janabakri
 

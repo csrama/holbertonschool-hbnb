@@ -1,5 +1,6 @@
 # HBnB Project - Part 2: RESTful API Implementation
 
+
 ## Project Overview
 HBnB is a simplified clone of Airbnb, developed as part of the Holberton School curriculum. This is Part 2 of the project, focusing on implementing a fully functional RESTful API that serves as the backend of the application.
 
@@ -134,5 +135,5 @@ Located in `app/persistence/repository.py`, the Repository abstracts data storag
 ## Contributors 
 
 - *Raghad Almalki* – https://github.com/Raghad717  
-- *Rama Alshahri* – https://github.com/csrama  
+- *Rama Alshehri* – https://github.com/csrama  
 - *Jana Bakri* – https://github.com/janabakri

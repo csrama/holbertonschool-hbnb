@@ -27,7 +27,7 @@ header, footer {
     border-bottom: 1px solid var(--border);
 }
 
-.header-content {
+.header-content, .header-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -103,9 +103,14 @@ h1, h2 {
 
 .place-card {
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -149,8 +154,8 @@ input:focus, textarea:focus, select:focus {
     box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
 }
 
-/* button */
-.submit-button, .details-button {
+/* Submit button (forms - full width) */
+.submit-button {
     background-color: var(--primary-purple);
     color: #ffffff;
     border: none;
@@ -164,8 +169,33 @@ input:focus, textarea:focus, select:focus {
     display: inline-block;
 }
 
-.submit-button:hover, .details-button:hover {
+.submit-button:hover {
     background-color: var(--primary-purple-hover);
+    transform: translateY(-2px);
+}
+
+/* View Details button (place cards - compact pill) */
+.details-button {
+    display: inline-block;
+    background-color: transparent;
+    color: var(--primary-purple);
+    border: 1.5px solid var(--primary-purple);
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease,
+                box-shadow 0.25s ease, transform 0.2s ease;
+    margin-top: 12px;
+}
+
+.details-button:hover {
+    background-color: var(--primary-purple);
+    color: #ffffff;
+    box-shadow: 0 0 12px rgba(138, 43, 226, 0.45);
     transform: translateY(-2px);
 }
 
@@ -191,16 +221,35 @@ input:focus, textarea:focus, select:focus {
 }
 
 .amenity-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     background-color: rgba(138, 43, 226, 0.15);
     color: var(--primary-purple);
-    padding: 6px 14px;
+    padding: 4px 10px;
     border-radius: 20px;
-    font-size: 0.9em;
+    font-size: 0.8em;
     font-weight: 600;
     border: 1px solid rgba(138, 43, 226, 0.3);
     transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, color 0.2s ease;
     cursor: default;
-    margin: 0 10px 10px 0; 
+    margin: 0 8px 8px 0;
+}
+
+.amenity-icon, .amenity-icon-fa {
+    width: 14px;
+    height: 14px;
+    font-size: 1.0em;
+    object-fit: contain;
+    filter: invert(29%) sepia(98%) saturate(1200%) hue-rotate(255deg) brightness(90%);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.amenity-tag:hover .amenity-icon, .amenity-tag:hover .amenity-icon-fa {
+    filter: brightness(0) invert(1);
 }
 
 .amenity-tag:hover {
@@ -220,23 +269,47 @@ input:focus, textarea:focus, select:focus {
 /* Review Cards */
 #reviews-list {
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
+    gap: 20px;
     width: 100%;
+    overflow-x: auto;
+    padding: 10px 5px 25px 5px; /* bottom padding for scrollbar */
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-purple) transparent;
+}
+
+#reviews-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+#reviews-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+
+#reviews-list::-webkit-scrollbar-thumb {
+    background: var(--primary-purple);
+    border-radius: 10px;
 }
 
 .review-card {
     background: var(--surface);
-    border: 1px solid var(--border);
+    border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 20px;
+    padding: 15px;
+    min-width: 300px;
+    max-width: 300px;
+    flex-shrink: 0;
+    scroll-snap-align: start;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .review-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border-color: var(--primary-purple);
 }
 
 .review-card .reviewer {

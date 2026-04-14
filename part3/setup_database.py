@@ -62,7 +62,7 @@ def main():
             rama = User(
                 id=str(uuid.uuid4()),
                 first_name='Rama',
-                last_name='Alshahri',
+                last_name='Alshehri',
                 email='rama@hbnb.com',
                 is_admin=False
             )
