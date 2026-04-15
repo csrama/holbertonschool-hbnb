@@ -1,9 +1,12 @@
 /* General site layouts */
 :root {
-    --primary-purple: #8a2be2; /* Professional Purple */
+    --primary-purple: #8a2be2;
+    /* Professional Purple */
     --primary-purple-hover: #7b1fa2;
-    --bg-dark: #121212; /* Deep Black */
-    --surface: #1e1e1e; /* Dark Gray for cards */
+    --bg-dark: #121212;
+    /* Deep Black */
+    --surface: #1e1e1e;
+    /* Dark Gray for cards */
     --text-primary: #ffffff;
     --text-secondary: #b3b3b3;
     --border: #333333;
@@ -20,14 +23,16 @@ body {
 }
 
 /* header, footer */
-header, footer {
+header,
+footer {
     background-color: var(--surface);
     color: var(--text-primary);
     padding: 15px 0;
     border-bottom: 1px solid var(--border);
 }
 
-.header-content, .header-container {
+.header-content,
+.header-container {
     max-width: 1200px;
     margin: 0 auto;
     display: flex;
@@ -38,7 +43,8 @@ header, footer {
 
 .logo {
     height: 40px;
-    filter: invert(1); /* Invert logo for dark mode if it's a black png */
+    filter: invert(1);
+    /* Invert logo for dark mode if it's a black png */
 }
 
 .login-button {
@@ -73,7 +79,8 @@ main {
 }
 
 /* Large headings (such as the Places and Ratings page) */
-h1, h2 {
+h1,
+h2 {
     color: var(--text-primary);
     text-align: center;
     margin-bottom: 30px;
@@ -81,7 +88,10 @@ h1, h2 {
 }
 
 /* Standardized format (Login, Add Review, Place Details) */
-.card, .login-card, .add-review-card, .place-details-card {
+.card,
+.login-card,
+.add-review-card,
+.place-details-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -94,7 +104,7 @@ h1, h2 {
 
 #places-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     width: 100%;
     max-width: 1100px;
@@ -125,6 +135,7 @@ h1, h2 {
 .place-info p {
     color: var(--text-secondary);
 }
+
 .place-info strong {
     color: var(--text-primary);
 }
@@ -136,7 +147,9 @@ h1, h2 {
     color: var(--text-secondary);
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
     width: 100%;
     padding: 12px;
     margin-top: 8px;
@@ -148,7 +161,9 @@ input, textarea, select {
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
     outline: none;
     border-color: var(--primary-purple);
     box-shadow: 0 0 0 2px rgba(138, 43, 226, 0.2);
@@ -188,7 +203,7 @@ input:focus, textarea:focus, select:focus {
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.25s ease, color 0.25s ease,
-                box-shadow 0.25s ease, transform 0.2s ease;
+        box-shadow 0.25s ease, transform 0.2s ease;
     margin-top: 12px;
 }
 
@@ -236,7 +251,8 @@ input:focus, textarea:focus, select:focus {
     margin: 0 8px 8px 0;
 }
 
-.amenity-icon, .amenity-icon-fa {
+.amenity-icon,
+.amenity-icon-fa {
     width: 14px;
     height: 14px;
     font-size: 1.0em;
@@ -248,7 +264,8 @@ input:focus, textarea:focus, select:focus {
     justify-content: center;
 }
 
-.amenity-tag:hover .amenity-icon, .amenity-tag:hover .amenity-icon-fa {
+.amenity-tag:hover .amenity-icon,
+.amenity-tag:hover .amenity-icon-fa {
     filter: brightness(0) invert(1);
 }
 
@@ -273,7 +290,8 @@ input:focus, textarea:focus, select:focus {
     gap: 20px;
     width: 100%;
     overflow-x: auto;
-    padding: 10px 5px 25px 5px; /* bottom padding for scrollbar */
+    padding: 10px 5px 25px 5px;
+    /* bottom padding for scrollbar */
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: var(--primary-purple) transparent;
@@ -297,7 +315,8 @@ input:focus, textarea:focus, select:focus {
     background: var(--surface);
     border: 1px solid #ddd;
     border-radius: 10px;
-    padding: 15px;
+    padding: 10px;
+    margin: 20px;
     min-width: 300px;
     max-width: 300px;
     flex-shrink: 0;
@@ -345,16 +364,20 @@ input:focus, textarea:focus, select:focus {
 
 .star {
     font-size: 1.8rem;
-    color: #444; /* inactive star color */
+    color: #444;
+    /* inactive star color */
     transition: color 0.2s;
 }
 
-.star.active, .star:hover, .star:hover ~ .star {
+.star.active,
+.star:hover,
+.star:hover~.star {
     color: var(--primary-purple);
 }
 
 .stars:hover .star {
-    color: #444; /* Reset when hovering container to allow ~ trick to work if we reverse it, but JS handles it better */
+    color: #444;
+    /* Reset when hovering container to allow ~ trick to work if we reverse it, but JS handles it better */
 }
 
 .review-input-row {

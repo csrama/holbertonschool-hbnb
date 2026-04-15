@@ -10,28 +10,23 @@ This is the frontend of the HBnB project. It is built with:
 
 It connects to a backend API to:
 
-- Login users
-- Show places
-- Show place details
-- Add reviews
-- Admin dashboard
+- Secure user authentication and session management
+- Dynamic listing of available places via AJAX
+- Detailed place views including host info and amenity icons
+- Interactive review submission system
+- **Filter Feature**: Client-side filtering by **Maximum Price** (10$, 50$, 100$)
 
 ## Pages
 
 ### 1. Login (`login.html`)
-- User enters email and password
-- Sends request to API (`/auth/login`)
-- Saves JWT token in cookie
-- Redirects to index page
+- Handles user authentication.
+- Stores JWT token in a secure cookie.
+- Redirects to the homepage upon success.
 
 ### 2. Index (`index.html`)
-- Shows all places as cards
-- Each place has:
-  - Title
-  - Price
-  - "View Details" button
-- Filter places by price (client-side)
-- Shows login link only if user is not logged in
+- Displays all places as interactive cards.
+- **Filtering**: Fully functional Max Price dropdown filter.
+- **Auth State**: Automatically hides the Login link when the user is authenticated.
 
 ### 3. Place Details (`place.html`)
 - Shows full info about a place:
@@ -57,11 +52,14 @@ It connects to a backend API to:
 ## How It Works
 
 ### Login Flow
-1. User submits form
-2. Request sent to: `POST /api/v1/auth/login`
-3. API returns token
-4. Token saved in cookie
-5. User redirected to index page
+1. User submits credentials via the login form.
+2. AJAX request sent to backend: `POST /api/v1/auth/login`.
+3. Backend returns a JWT token.
+4. Token is stored in a cookie.
+5. `scripts.js` detects the token and hides the "Login" link globally.
+
+### Price Filtering Logic
+The filter logic in `scripts.js` uses `data-price` attributes on cards to instantly toggle visibility based on the selected maximum value, providing a smooth user experience without page refreshes.
 
 ### Fetch Data
 All data is fetched using Fetch API:
@@ -117,10 +115,12 @@ cd part4
 python3 -m http.server 8080
 Then open: http://localhost:8080/index.html
 
-3. Login Credentials
-Role	Email	Password
-Admin	admin@example.com	admin123
-Regular User	test123@example.com	test123
+### 3. Login Credentials (Synced with Database)
+| Role | Email | Password |
+|------|-------|----------|
+| **Admin** | raghad@hbnb.com | admin123 |
+| **Regular User** | jana@hbnb.com | jana123 |
+| **Regular User** | rama@hbnb.com | rama123 |
 CORS Fix
 If you get CORS errors, add this to part3/app/__init__.py:
 
@@ -152,28 +152,12 @@ loadPlaceDetails(placeId)	Load place info
 loadReviews(placeId)	Load reviews for a place
 displayReviews(reviews)	Render reviews
 submitReview(e)	Send review to API
-Testing
-After running both backend and frontend:
-
-Open login.html
-
-Login with admin credentials
-
-You should be redirected to index.html
-
-Click "View Details" on any place
-
-Add a review (as regular user)
-
-Visit admin.html to manage amenities
-
-Troubleshooting
-Issue	Solution
-"Invalid credentials"	Check email/password, or create admin in database
-CORS error	Add CORS(app) to Flask app
-"Failed to fetch"	Make sure backend is running on port 5000
-404 errors	Check API endpoints and place IDs
-No places showing	Create places in database using Python script
+## Testing & Verification
+1. **Initialize**: Run `python setup_database.py` in the `part3` folder.
+2. **Login**: Use `raghad@hbnb.com` to log in. Verify the "Login" link disappears.
+3. **Filter**: Set "Max Price" to 50$. Verify that places over 50$ are hidden.
+4. **Details**: Click "View Details" to see deep info and amenity icons.
+5. **Navigation**: Click the HBnB Logo from any sub-page to return home instantly.
 
 Author
 

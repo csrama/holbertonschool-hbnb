@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,10 +8,13 @@
   <link rel="icon" href="images/icon.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
+
 <body>
   <header>
     <div class="header-container">
-      <img src="images/logo.png" alt="HBnB Logo" class="logo">
+      <a href="index.html">
+        <img src="images/logo.png" alt="HBnB Logo" class="logo">
+      </a>
       <a href="#" class="login-button" id="login-link">Logout</a>
     </div>
   </header>
@@ -18,17 +22,17 @@
   <main>
     <div class="review-container">
       <h1 id="place-name-header">Reviewing: Beautiful mountain House</h1>
-      
+
       <section class="card add-review-card">
         <h2>Add a Review</h2>
         <form id="review-form">
           <input type="hidden" id="place-id">
-          
+
           <div class="form-group">
             <label for="review-text">Your Review:</label>
             <textarea id="review-text" rows="4" placeholder="Write your experience here..." required></textarea>
           </div>
-          
+
           <div class="form-group">
             <label for="rating">Rating:</label>
             <select id="rating" required>
@@ -39,7 +43,7 @@
               <option value="5">5 Stars</option>
             </select>
           </div>
-          
+
           <button type="submit" class="submit-button">Submit Review</button>
         </form>
       </section>
@@ -52,4 +56,5 @@
 
   <script src="js/scripts.js"></script>
 </body>
+
 </html>

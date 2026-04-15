@@ -1,8 +1,11 @@
- /*scripts.js */
+/*scripts.js */
 
 const API_URL = 'http://127.0.0.1:5000/api/v1';
 
-/*UTILITY: Token helpers (localStorage-based) */
+/**
+ * Retrieves a value from either localStorage or cookies.
+ * This ensures compatibility across different browser environments.
+ */
 function getCookie(name) {
     // Primary: check localStorage
     const lsVal = localStorage.getItem(name);
@@ -17,6 +20,10 @@ function getCookie(name) {
     return null;
 }
 
+/**
+ * Saves a value to BOTH localStorage and cookies.
+ * Used primarily for storing the JWT authentication token.
+ */
 function setCookie(name, value, days = 7) {
     // Store in localStorage for reliable cross-page access
     localStorage.setItem(name, value);
@@ -56,7 +63,10 @@ function updateLoginLinkState(loginLink, token) {
     }
 }
 
-/* LOGIN */
+/**
+ * Sends a POST request to the API to authenticate a user.
+ * Returns the raw response object.
+ */
 async function loginUser(email, password) {
     const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -119,6 +129,11 @@ async function fetchPlaces(token) {
     }
 }
 
+/**
+ * Renders the fetched places into the index page grid.
+ * Displays the name and price for each card as required.
+ * @param {Array} places - Array of place objects from the API.
+ */
 function displayPlaces(places) {
     const list = document.getElementById('places-list');
     if (!list) return;
@@ -149,6 +164,10 @@ function displayPlaces(places) {
     });
 }
 
+/**
+ * Initializes the client-side price filter.
+ * Hides or shows cards based on the selected maximum price.
+ */
 function setupPriceFilter() {
     const filter = document.getElementById('price-filter');
     if (!filter) return;
